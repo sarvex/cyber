@@ -3,10 +3,7 @@ try:
 except NameError:
     pass
 
-list = []
-for i in range(0, 1000000):
-  list.append(i)
-
+list = list(range(0, 1000000))
 sum = 0
 for i in list:
   sum += i

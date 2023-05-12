@@ -6,14 +6,10 @@ class Node:
         self.value = value
 
     def getLeftmost(self):
-        if self.left is None:
-            return self
-        return self.left.getLeftmost()
+        return self if self.left is None else self.left.getLeftmost()
 
     def getRightmost(self):
-        if self.right is None:
-            return self
-        return self.right.getRightmost()
+        return self if self.right is None else self.right.getRightmost()
 
     def getLeftSibling(self):
         if self.parent.right is self:
@@ -40,16 +36,10 @@ class Node:
             return self.parent.getRightSibling2(height + 1)
 
     def getRightN(self, n):
-        if n == 1:
-            return self.right
-        else:
-            return self.right.getRightN(n - 1)
+        return self.right if n == 1 else self.right.getRightN(n - 1)
 
     def getLeftN(self, n):
-        if n == 1:
-            return self.left
-        else:
-            return self.left.getLeftN(n - 1)
+        return self.left if n == 1 else self.left.getLeftN(n - 1)
 
 class Heap:
 
@@ -69,18 +59,14 @@ class Heap:
             parent = self.root.getLeftmost()
             new = Node(None, None, parent, value)
             parent.left = new
-            self.last = new
+        elif self.size % 2 == 0:
+            new = Node(None, None, self.last.parent, value)
+            self.last.parent.right = new
         else:
-            # Insert after last node.
-            if self.size % 2 == 0:
-                new = Node(None, None, self.last.parent, value)
-                self.last.parent.right = new
-                self.last = new
-            else:
-                sibling = self.last.parent.getRightSibling()
-                new = Node(None, None, sibling, value)
-                sibling.left = new
-                self.last = new
+            sibling = self.last.parent.getRightSibling()
+            new = Node(None, None, sibling, value)
+            sibling.left = new
+        self.last = new
         self.size = self.size + 1
         self.siftUp(new)
 
@@ -114,11 +100,10 @@ class Heap:
 
         if parentParent is None:
             self.root = node
+        elif parentParent.left is parentSave:
+            parentParent.left = node
         else:
-            if parentParent.left is parentSave:
-                parentParent.left = node
-            else:
-                parentParent.right = node
+            parentParent.right = node
 
     def siftUp(self, node):
         if node.parent is None:
@@ -187,7 +172,7 @@ for i in range(1, 20000):
     h.insert(i) 
 
 sum = 0
-for i in range(1, 20000):
+for _ in range(1, 20000):
     sum = sum + h.popTop().value
 
 print(sum)

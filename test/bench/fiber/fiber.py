@@ -8,7 +8,7 @@ def inc():
     yield
 
 list = []
-for i in range(0, 100000):
+for _ in range(0, 100000):
     f = inc()
     next(f)
     list.append(f)
